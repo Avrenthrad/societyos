@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.turbo/
+.expo/
+*.log
+.env
+.env.*
+!.env.example
+src-tauri/target/
