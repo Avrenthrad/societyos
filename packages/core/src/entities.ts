@@ -27,6 +27,17 @@ export interface Person extends BaseEntity {
   emails: string[];
   phones: string[];
   notes?: string;
+  /** "YYYY-MM-DD", or "--MM-DD" when the year is unknown (vCard style). */
+  birthday?: string;
+  /** Remind me to reach out if we haven't been in touch for this many days. */
+  keepInTouchDays?: number;
+  /**
+   * Last contact logged by hand ("caught up today"). Contact found in linked
+   * events, messages, tasks and money counts too, so this is rarely needed.
+   */
+  lastContactAt?: ISODate;
+  /** Groups such as "family", "friends", "work". */
+  tags?: string[];
 }
 
 export interface Note extends BaseEntity {

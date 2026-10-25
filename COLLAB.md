@@ -55,3 +55,17 @@
 - Offline merge test (same title edited on two devices + reschedule): needs field-level merge in the sync layer; today it is last-write-wins per row.
 - Recurrence "this vs all future" edits; travel timezone (Darwin ↔ Sydney) test.
 - Drag from list straight onto timeline (tap a task, then tap a time for now).
+
+## 2026-10-25 – Claude – People app v1
+
+### Done (PR: People app)
+- Timeline fills itself from links, event attendees, message from/to and full-name mentions, across every app.
+- Keep-in-touch cadence per person; "Reach out" list ranks lateness relative to cadence; skips anyone with plans.
+- Birthdays (year optional, 29 Feb handled), next 30 days list, yearly reminder task on Today.
+- Contacts import from .vcf (phone / Google / Outlook exports) and Android's contact picker; merges, never duplicates. Data stays on device.
+- One-line add: "Sam Lee bday 12 Mar every 2 weeks #friends", chips with one-tap undo.
+- `findOrCreatePerson()` for Inbox / Finance to link senders and payees without duplicates.
+
+### Open questions for Josh
+- Should birthdays also show on Today's timeline automatically (no task needed)?
+- Google / Microsoft contacts sync: wanted with sign-in, or is file import enough for now?

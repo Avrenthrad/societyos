@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "SocietyOS People",
+    "slug": "societyos-people",
+    "scheme": "societyos-people",
+    "platforms": ["ios", "android", "web"],
+    "web": { "bundler": "metro", "output": "single" },
+    "plugins": ["expo-router"]
+  }
+}
