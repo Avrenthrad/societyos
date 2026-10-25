@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "SocietyOS Today",
+    "slug": "societyos-today",
+    "scheme": "societyos-today",
+    "platforms": ["ios", "android", "web"],
+    "web": { "bundler": "metro", "output": "single" },
+    "plugins": ["expo-router"]
+  }
+}

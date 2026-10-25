@@ -1,0 +1,29 @@
+{
+  "name": "@societyos/today",
+  "version": "0.0.0",
+  "private": true,
+  "main": "expo-router/entry",
+  "scripts": {
+    "dev": "expo start",
+    "ios": "expo start --ios",
+    "android": "expo start --android",
+    "web": "expo start --web",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@societyos/core": "workspace:*",
+    "@societyos/sync": "workspace:*",
+    "@societyos/today-logic": "workspace:*",
+    "@societyos/ui": "workspace:*",
+    "expo": "~54.0.0",
+    "expo-router": "~6.0.0",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "react-native": "0.81.0",
+    "react-native-web": "^0.21.0"
+  },
+  "devDependencies": {
+    "@types/react": "~19.1.0",
+    "typescript": "^5.8.0"
+  }
+}

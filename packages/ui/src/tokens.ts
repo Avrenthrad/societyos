@@ -36,6 +36,7 @@ export const font = {
 /** Each app gets an accent so people can tell them apart at a glance. */
 export const appAccents = {
   notes: "#F4B400",
+  today: "#188038",
   inbox: "#3D5AFE",
   tasks: "#188038",
   calendar: "#D93025",
@@ -43,6 +44,24 @@ export const appAccents = {
   money: "#00897B",
   places: "#EF6C00",
   files: "#546E7A",
+} as const;
+
+/**
+ * Timeline blocks. Tasks and events differ in fill lightness and shape
+ * (tasks carry a checkbox), not only hue, so they stay apart for
+ * colour-blind people too.
+ */
+export const blocks = {
+  light: {
+    task: { bg: "#DDF1E3", border: "#188038", text: "#0D4F22" },
+    event: { bg: "#E8ECFF", border: "#3D5AFE", text: "#1F2E8C" },
+    now: "#D93025",
+  },
+  dark: {
+    task: { bg: "#143A22", border: "#81C995", text: "#D3F2DC" },
+    event: { bg: "#1E2552", border: "#7C8CFF", text: "#E0E4FF" },
+    now: "#F28B82",
+  },
 } as const;
 
 export type ThemeName = keyof typeof colors;
