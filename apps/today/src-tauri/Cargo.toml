@@ -1,0 +1,15 @@
+[package]
+name = "societyos-today"
+version = "0.1.0"
+description = "SocietyOS Today: tasks and calendar in one"
+edition = "2021"
+
+[lib]
+name = "societyos_today_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }

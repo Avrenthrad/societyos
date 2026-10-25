@@ -40,5 +40,5 @@ calendar can never disagree and there are no copies to reconcile.
 - Field-level merge for offline edits on two devices (today: last write
   wins per row, which can drop one side's change).
 - Upcoming and Inbox views, week and month views.
-- Real data: the app seeds demo data in memory until the SQLite store and
-  sync land.
+- Sync between devices: data is saved per device for now (see
+  `deploy.md`).

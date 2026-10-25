@@ -20,6 +20,7 @@ docs/
   stack.md          what we use and why
   architecture.md   how the apps share data and talk to each other
   adding-an-app.md  checklist for a new app
+  deploy.md         web link, install on phones, desktop installers
 ```
 
 ## Getting started

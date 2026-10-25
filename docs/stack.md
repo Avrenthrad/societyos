@@ -28,5 +28,5 @@ apps exist.
 ## Not set up yet
 
 - Supabase project and PowerSync instance (needs accounts).
-- SQLite-backed `Store` (in-memory one is used for now).
-- Tauri desktop shell.
+- SQLite-backed `Store` (a browser-storage `PersistedStore` is used for now).
+- Desktop: Tauri shell exists for Today (`apps/today/src-tauri`); see `deploy.md`.

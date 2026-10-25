@@ -26,7 +26,7 @@ export function useNow() {
   return now;
 }
 
-export function useToday(day: Date, now: Date) {
+export function useToday(day: Date, now: Date, loaded = true) {
   const v = useStoreVersion();
   const [agenda, setAgenda] = useState<DayAgenda>();
   const [counts, setCounts] = useState({ today: 0, upcoming: 0, inbox: 0 });
@@ -42,7 +42,7 @@ export function useToday(day: Date, now: Date) {
     return () => {
       live = false;
     };
-  }, [v, day.getTime(), now.getTime()]);
+  }, [v, day.getTime(), now.getTime(), loaded]);
   return { agenda, counts, people };
 }
 

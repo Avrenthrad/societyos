@@ -1,5 +1,5 @@
 import type { Task } from "@societyos/core";
-import { addDays, addMinutes, DEFAULT_BLOCK_MIN, formatDay, sameDay, scheduleTask, startOfDay, weekDays, dayNames, monthNames, type TimelineItem } from "@societyos/today-logic";
+import { addDays, addMinutes, DEFAULT_BLOCK_MIN, formatDay, sameDay, scheduleTask, startOfDay, dayNames, monthNames, type TimelineItem } from "@societyos/today-logic";
 import { font, radius, space } from "@societyos/ui";
 import { useEffect, useMemo, useState } from "react";
 import { Modal, Pressable, ScrollView, Text, View, useWindowDimensions } from "react-native";
@@ -7,36 +7,39 @@ import { Detail, Segmented } from "../src/components/Detail";
 import { QuickAdd } from "../src/components/QuickAdd";
 import { Timeline } from "../src/components/Timeline";
 import { ToSchedule } from "../src/components/ToSchedule";
-import { seedDemo, store } from "../src/store";
+import { ready, store } from "../src/store";
 import { useTheme, type Theme } from "../src/theme";
 import { useNow, useToday } from "../src/useToday";
 
-let seeded = false;
-
-/** Wide screens get list + day + details side by side; phones get one timeline. */
-const WIDE = 900;
+/**
+ * Three layouts by window width:
+ * - desktop (1200+): menu, to-schedule list, day, details side by side
+ * - tablet (700+, iPad portrait and landscape): list + day; details take
+ *   the list's place while a task is open
+ * - phone: one timeline, tray of tasks to schedule, quick add at the bottom
+ */
+const DESKTOP = 1200;
+const TABLET = 700;
 
 export default function TodayScreen() {
   const t = useTheme();
   const { c } = t;
   const now = useNow();
   const { width } = useWindowDimensions();
-  const wide = width >= WIDE;
+  const desktop = width >= DESKTOP;
+  const wide = width >= TABLET;
   const [day, setDay] = useState(() => startOfDay(new Date()));
   const [selectedId, setSelectedId] = useState<string>();
   const [placingId, setPlacingId] = useState<string>();
   const [mode, setMode] = useState<"timeline" | "list">("timeline");
-  const { agenda, counts, people } = useToday(day, now);
-
+  const [loaded, setLoaded] = useState(false);
   useEffect(() => {
-    if (!seeded) {
-      seeded = true;
-      seedDemo();
-    }
+    ready.then(() => setLoaded(true));
   }, []);
+  const { agenda, counts, people } = useToday(day, now, loaded);
 
   const allTasks = useMemo(() => {
-    if (!agenda) return [];
+    if (!agenda || !loaded) return [];
     const fromTimeline = agenda.timeline.flatMap((i) => (i.kind === "task" ? [i.task] : []));
     return [...fromTimeline, ...agenda.toSchedule.overdue, ...agenda.toSchedule.due, ...agenda.done];
   }, [agenda]);
@@ -63,7 +66,7 @@ export default function TodayScreen() {
     setPlacingId(undefined);
   };
 
-  if (!agenda) return <View style={{ flex: 1, backgroundColor: c.bg }} />;
+  if (!agenda || !loaded) return <View style={{ flex: 1, backgroundColor: c.bg }} />;
 
   const dateLine = `${["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][day.getDay()]} ${day.getDate()} ${monthNames[day.getMonth()]}`;
   const title = sameDay(day, now) ? "Today" : formatDay(day, now);
@@ -98,8 +101,8 @@ export default function TodayScreen() {
   if (wide) {
     return (
       <View style={{ flex: 1, backgroundColor: c.surface }}>
-        <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", gap: space.lg, paddingHorizontal: space.xl, paddingVertical: space.md, backgroundColor: c.bg, borderBottomWidth: 1, borderColor: c.border }}>
-          <View style={{ minWidth: 180, gap: 2 }}>
+        <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", gap: space.lg, paddingHorizontal: desktop ? space.xl : space.lg, paddingVertical: space.md, backgroundColor: c.bg, borderBottomWidth: 1, borderColor: c.border }}>
+          <View style={{ minWidth: desktop ? 180 : 120, gap: 2 }}>
             <Text accessibilityRole="header" style={{ color: c.text, fontSize: 22, fontWeight: "700" }}>{title}</Text>
             <Text style={{ color: c.textMuted, fontSize: 13 }}>{dateLine}</Text>
           </View>
@@ -107,9 +110,13 @@ export default function TodayScreen() {
           <DayPager t={t} day={day} onChange={setDay} />
         </View>
         <View style={{ flex: 1, flexDirection: "row" }}>
-          <Nav t={t} counts={counts} />
-          <ScrollView style={{ width: 340, flexGrow: 0, borderRightWidth: 1, borderColor: c.border }} contentContainerStyle={{ padding: space.lg }}>
-            <ToSchedule t={t} agenda={agenda} selectedId={placingId} onSelect={pickUnscheduled} now={now} />
+          {desktop ? <Nav t={t} counts={counts} /> : null}
+          <ScrollView style={{ width: desktop ? 340 : Math.min(320, width * 0.4), flexGrow: 0, borderRightWidth: 1, borderColor: c.border }} contentContainerStyle={{ padding: space.lg }}>
+            {!desktop && selectedTask && !placing ? (
+              <Detail t={t} task={selectedTask} now={now} onClose={() => setSelectedId(undefined)} />
+            ) : (
+              <ToSchedule t={t} agenda={agenda} selectedId={placingId} onSelect={pickUnscheduled} now={now} />
+            )}
           </ScrollView>
           <View style={{ flex: 1, minWidth: 0, padding: space.lg, gap: space.md, backgroundColor: c.bg }}>
             <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", gap: space.sm }}>
@@ -120,7 +127,7 @@ export default function TodayScreen() {
             {placingHint}
             {timeline}
           </View>
-          {selectedTask ? (
+          {desktop && selectedTask ? (
             <ScrollView style={{ width: 320, flexGrow: 0, borderLeftWidth: 1, borderColor: c.border, backgroundColor: c.bg }} contentContainerStyle={{ padding: space.lg }}>
               <Detail t={t} task={selectedTask} now={now} onClose={() => setSelectedId(undefined)} />
             </ScrollView>
@@ -235,7 +242,7 @@ function WeekStrip({ t, day, now, onPick }: { t: Theme; day: Date; now: Date; on
   const { c } = t;
   return (
     <View accessibilityLabel="Pick a day" style={{ flexDirection: "row", gap: 4, paddingHorizontal: space.md, paddingVertical: space.sm }}>
-      {weekDays(day).map((d) => {
+      {Array.from({ length: 7 }, (_, i) => addDays(day, i - 3)).map((d) => {
         const on = sameDay(d, day);
         const today = sameDay(d, now);
         return (
