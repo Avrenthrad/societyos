@@ -55,3 +55,17 @@
 - Offline merge test (same title edited on two devices + reschedule): needs field-level merge in the sync layer; today it is last-write-wins per row.
 - Recurrence "this vs all future" edits; travel timezone (Darwin ↔ Sydney) test.
 - Drag from list straight onto timeline (tap a task, then tap a time for now).
+
+## 2026-10-25 – Claude – Notes app v1
+
+### Done (PR: Notes app)
+- Markdown notes, autosave, offline (installable web app at /societyos/notes/).
+- Organising: #tags with nesting (#work/clients), pinned, Meetings view.
+- Links without filing: @Person mentions and [[note]] links kept as `Link` rows on every save; backlinks shown.
+- Checklist item → Today task (linked to note + mentioned people); ticks sync both ways.
+- Meeting notes made automatically 10 min before a Today event starts (once per event, not remade if deleted).
+- Search across all apps, every word must match, title/whole-word ranking.
+
+### Not done yet
+- Cross-device sync + text merge for the same note edited on two devices.
+- Attachments, version history, sharing.
