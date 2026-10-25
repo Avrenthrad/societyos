@@ -7,10 +7,13 @@
     "dev": "expo start",
     "ios": "expo start --ios",
     "android": "expo start --android",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "typecheck": "tsc --noEmit",
+    "build:web": "expo export --platform web --output-dir dist"
   },
   "dependencies": {
     "@societyos/core": "workspace:*",
+    "@societyos/notes-logic": "workspace:*",
     "@societyos/sync": "workspace:*",
     "@societyos/ui": "workspace:*",
     "expo": "~54.0.0",
@@ -19,5 +22,9 @@
     "react-dom": "19.1.0",
     "react-native": "0.81.0",
     "react-native-web": "^0.21.0"
+  },
+  "devDependencies": {
+    "@types/react": "~19.1.0",
+    "typescript": "^5.8.0"
   }
 }

@@ -3,8 +3,17 @@
     "name": "SocietyOS Notes",
     "slug": "societyos-notes",
     "scheme": "societyos-notes",
-    "platforms": ["ios", "android", "web"],
-    "web": { "bundler": "metro", "output": "single" },
-    "plugins": ["expo-router"]
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "web": {
+      "bundler": "metro",
+      "output": "single"
+    },
+    "plugins": [
+      "expo-router"
+    ]
   }
 }
