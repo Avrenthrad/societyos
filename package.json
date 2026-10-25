@@ -7,7 +7,8 @@
     "test": "turbo run test",
     "typecheck": "turbo run typecheck",
     "dev:notes": "pnpm --filter @societyos/notes dev",
-    "dev:today": "pnpm --filter @societyos/today dev"
+    "dev:today": "pnpm --filter @societyos/today dev",
+    "dev:inbox": "pnpm --filter @societyos/inbox dev"
   },
   "devDependencies": {
     "turbo": "^2.5.0",
