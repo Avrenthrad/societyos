@@ -8,7 +8,7 @@ const base = { ownerId: "u1", sourceApp: "test" };
 describe("MemoryStore", () => {
   it("puts, lists and soft-deletes", async () => {
     const s = new MemoryStore();
-    const t = createEntity("task", { ...base, title: "Buy milk", done: false, priority: 1 });
+    const t = createEntity("task", { ...base, title: "Buy milk", status: "open", priority: 1 });
     await s.put(t);
     expect(await s.list("task")).toHaveLength(1);
     await s.remove("task", t.id);
@@ -37,7 +37,7 @@ describe("MemoryStore", () => {
     const msg = createEntity("message", {
       ...base, channel: "email", threadId: "t1", fromId: "p1", toIds: [], body: "Can you send the report?", read: false,
     });
-    const task = createEntity("task", { ...base, title: "Send report", done: false, priority: 2 });
+    const task = createEntity("task", { ...base, title: "Send report", status: "open", priority: 2 });
     await link(s, task, msg, "created-from", base);
     expect(await linksFor(s, msg.id)).toHaveLength(1);
   });
@@ -48,8 +48,8 @@ describe("searchAll", () => {
     const { searchAll } = await import("./search.js");
     const s = new MemoryStore();
     await s.put(createEntity("note", { ...base, title: "Dentist notes", body: "", tags: [], pinned: false }));
-    await s.put(createEntity("task", { ...base, title: "Book dentist", done: false, priority: 1 }));
-    await s.put(createEntity("task", { ...base, title: "Groceries", done: false, priority: 0 }));
+    await s.put(createEntity("task", { ...base, title: "Book dentist", status: "open", priority: 1 }));
+    await s.put(createEntity("task", { ...base, title: "Groceries", status: "open", priority: 0 }));
     const hits = await searchAll(s, "dentist");
     expect(hits.map((h) => h.type).sort()).toEqual(["note", "task"]);
   });

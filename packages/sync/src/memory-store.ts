@@ -6,7 +6,7 @@ import { isNewer, type Listener, type Store } from "./store.js";
  * for a SQLite-backed store with the same interface.
  */
 export class MemoryStore implements Store {
-  private rows = new Map<string, Entity>();
+  protected rows = new Map<string, Entity>();
   private listeners = new Set<Listener>();
 
   private key(type: EntityType, id: ID) {
@@ -49,6 +49,11 @@ export class MemoryStore implements Store {
     this.rows.set(k, entity);
     this.emit({ op: entity.deletedAt ? "delete" : "put", entity });
     return true;
+  }
+
+  /** Every row, deleted ones included (so deletes survive a save). */
+  snapshot(): Entity[] {
+    return [...this.rows.values()];
   }
 
   subscribe(listener: Listener) {

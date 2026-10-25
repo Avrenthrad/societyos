@@ -8,3 +8,5 @@
 4. Read and write only through the `Store` from `@societyos/sync`.
 5. Use `link()` whenever the app creates something from another app's data.
 6. Add a `dev:<name>` script to the root `package.json`.
+7. Keep the app's `metro.config.js` (it uses `metro.workspace.js` so Metro
+   can load the shared packages).
