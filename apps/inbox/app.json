@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "SocietyOS Inbox",
+    "slug": "societyos-inbox",
+    "scheme": "societyos-inbox",
+    "platforms": ["ios", "android", "web"],
+    "web": { "bundler": "metro", "output": "single" },
+    "plugins": ["expo-router"]
+  }
+}

@@ -55,3 +55,19 @@
 - Offline merge test (same title edited on two devices + reschedule): needs field-level merge in the sync layer; today it is last-write-wins per row.
 - Recurrence "this vs all future" edits; travel timezone (Darwin ↔ Sydney) test.
 - Drag from list straight onto timeline (tap a task, then tap a time for now).
+
+## 2026-10-25 – Claude – Inbox (email) v1
+
+### Done (PR: Inbox app)
+- `packages/mail-logic` + `apps/inbox`; details in `docs/inbox.md`.
+- Unified inbox, threads, Focused/Other, Gmail-style search, labels, snooze, undo, undo send, keyboard shortcuts.
+- Outlook (Microsoft Graph) and Gmail API connectors, sign-in from the browser with no secrets. Needs Josh's app registrations.
+- Email → Today task (a time becomes a block, "by Thursday" becomes a due date), thread → note, sender → People, all linked.
+- Date finder tests: "Friday at 7pm", "2-3pm", "by Thursday", "12 November", and "you may" / "I sat in the sun" stay plain text.
+
+### Not done yet
+- IMAP (needs a small server), push for new mail, attachment download/upload, rich text compose, native-app sign-in.
+
+### Open questions for Josh
+- Register the Microsoft and Google apps (steps in `docs/inbox.md`)?
+- Gmail for other people later needs Google verification + a yearly paid security assessment. OK to stay "testing mode" (100 users) for now?
