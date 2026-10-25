@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "SocietyOS Finance",
+    "slug": "societyos-finance",
+    "scheme": "societyos-finance",
+    "platforms": ["ios", "android", "web"],
+    "web": { "bundler": "metro", "output": "single" },
+    "plugins": ["expo-router"]
+  }
+}

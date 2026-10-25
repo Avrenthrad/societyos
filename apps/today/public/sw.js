@@ -2,7 +2,19 @@
 // Pages: network first, so every new deploy shows up straight away; the
 // saved copy is used only when offline. Built files have hashed names and
 // never change, so they come from the cache first.
-const CACHE = "today-v1";
+// Other SocietyOS apps live in sub-folders of this site (/societyos/finance/
+// and so on) and run their own worker, so leave their requests and caches alone.
+const CACHE = "today-v2";
+const PREFIX = "today-";
+const OWN_FOLDERS = ["_expo", "assets"];
+
+function isSiblingApp(url) {
+  const scope = new URL(self.registration.scope).pathname;
+  if (!url.pathname.startsWith(scope)) return false;
+  const rest = url.pathname.slice(scope.length);
+  const slash = rest.indexOf("/");
+  return slash > 0 && !OWN_FOLDERS.includes(rest.slice(0, slash));
+}
 
 self.addEventListener("install", (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(["./", "./manifest.webmanifest", "./icon-192.png"])));
@@ -11,14 +23,15 @@ self.addEventListener("install", (e) => {
 
 self.addEventListener("activate", (e) => {
   e.waitUntil(
-    caches.keys().then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)))),
+    caches.keys().then((keys) => Promise.all(keys.filter((k) => k.startsWith(PREFIX) && k !== CACHE).map((k) => caches.delete(k)))),
   );
   self.clients.claim();
 });
 
 self.addEventListener("fetch", (e) => {
   const req = e.request;
-  if (req.method !== "GET" || new URL(req.url).origin !== self.location.origin) return;
+  const url = new URL(req.url);
+  if (req.method !== "GET" || url.origin !== self.location.origin || isSiblingApp(url)) return;
 
   if (req.mode === "navigate") {
     e.respondWith(

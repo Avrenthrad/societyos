@@ -114,7 +114,11 @@ export interface Place extends BaseEntity {
   lng?: number;
 }
 
-/** A money movement: spend, income or transfer. Amounts in minor units (cents). */
+/**
+ * A money movement: spend, income or transfer. Amounts in minor units
+ * (cents): negative is money out, positive is money in. People, places,
+ * events and receipts attach with links (related, located-at, attached).
+ */
 export interface Transaction extends BaseEntity {
   type: "transaction";
   amountMinor: number;
@@ -123,6 +127,31 @@ export interface Transaction extends BaseEntity {
   description: string;
   category?: string;
   accountId?: ID;
+  /** Free-text account name, e.g. "Everyday" or the bank a CSV came from. */
+  account?: string;
+  notes?: string;
+  /** Set on CSV imports so importing the same file twice adds nothing. */
+  importKey?: string;
+  /** The bill this paid. */
+  billId?: ID;
+}
+
+/**
+ * A bill to pay. Its due date lives on one repeating task in Today (taskId),
+ * so the reminder and the bill can never disagree. Paying it in Finance ticks
+ * the task off; ticking the task off in Today asks Finance to record it.
+ */
+export interface Bill extends BaseEntity {
+  type: "bill";
+  name: string;
+  /** What is usually owed, in minor units (positive). */
+  amountMinor: number;
+  currency: string;
+  category?: string;
+  taskId: ID;
+  /** When a payment was last recorded (matches the task's lastDoneAt). */
+  recordedAt?: ISODate;
+  autopay?: boolean;
 }
 
 export interface FileRef extends BaseEntity {
@@ -162,6 +191,7 @@ export type Entity =
   | Message
   | Place
   | Transaction
+  | Bill
   | FileRef
   | Link;
 export type EntityType = Entity["type"];

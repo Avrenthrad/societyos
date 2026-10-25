@@ -1,0 +1,17 @@
+{
+  "name": "@societyos/finance-logic",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@societyos/core": "workspace:*",
+    "@societyos/sync": "workspace:*",
+    "@societyos/today-logic": "workspace:*"
+  }
+}

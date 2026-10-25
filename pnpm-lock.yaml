@@ -18,6 +18,49 @@ importers:
         specifier: ^3.2.0
         version: 3.2.7(@types/node@26.6.5)(lightningcss@1.33.0)(terser@5.51.2)(yaml@2.9.1)
 
+  apps/finance:
+    dependencies:
+      '@societyos/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@societyos/finance-logic':
+        specifier: workspace:*
+        version: link:../../packages/finance-logic
+      '@societyos/sync':
+        specifier: workspace:*
+        version: link:../../packages/sync
+      '@societyos/today-logic':
+        specifier: workspace:*
+        version: link:../../packages/today-logic
+      '@societyos/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
+      expo:
+        specifier: ~54.0.0
+        version: 54.0.38(@babel/core@7.29.7)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.0(@babel/core@7.29.7)(@react-native/metro-config@0.88.0(@babel/core@7.29.7))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)
+      expo-router:
+        specifier: ~6.0.0
+        version: 6.0.24(@expo/metro-runtime@6.1.2)(@types/react@19.1.17)(expo-constants@18.0.14)(expo-linking@8.0.12)(expo@54.0.38)(react-dom@19.1.0(react@19.1.0))(react-native-safe-area-context@5.10.1(react-native@0.81.0(@babel/core@7.29.7)(@react-native/metro-config@0.88.0(@babel/core@7.29.7))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native-screens@4.30.0(react-native@0.81.0(@babel/core@7.29.7)(@react-native/metro-config@0.88.0(@babel/core@7.29.7))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native-web@0.21.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-native@0.81.0(@babel/core@7.29.7)(@react-native/metro-config@0.88.0(@babel/core@7.29.7))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
+      react:
+        specifier: 19.1.0
+        version: 19.1.0
+      react-dom:
+        specifier: 19.1.0
+        version: 19.1.0(react@19.1.0)
+      react-native:
+        specifier: 0.81.0
+        version: 0.81.0(@babel/core@7.29.7)(@react-native/metro-config@0.88.0(@babel/core@7.29.7))(@types/react@19.1.17)(react@19.1.0)
+      react-native-web:
+        specifier: ^0.21.0
+        version: 0.21.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+    devDependencies:
+      '@types/react':
+        specifier: ~19.1.0
+        version: 19.1.17
+      typescript:
+        specifier: ^5.8.0
+        version: 5.9.3
+
   apps/notes:
     dependencies:
       '@societyos/core':
@@ -92,6 +135,18 @@ importers:
         version: 5.9.3
 
   packages/core: {}
+
+  packages/finance-logic:
+    dependencies:
+      '@societyos/core':
+        specifier: workspace:*
+        version: link:../core
+      '@societyos/sync':
+        specifier: workspace:*
+        version: link:../sync
+      '@societyos/today-logic':
+        specifier: workspace:*
+        version: link:../today-logic
 
   packages/sync:
     dependencies:

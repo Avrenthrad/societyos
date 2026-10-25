@@ -1,5 +1,6 @@
-# Every push to main rebuilds the Today web app and publishes it to
-# https://avrenthrad.github.io/societyos/ (the desktop app loads this too).
+# Every push to main rebuilds every app's web version and publishes them to
+# https://avrenthrad.github.io/societyos/ (Today, which the desktop app loads)
+# and https://avrenthrad.github.io/societyos/<app>/ (see scripts/build-web.sh).
 name: Web
 
 on:
@@ -29,16 +30,16 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
       - run: pnpm test
-      - name: Build web app
-        run: pnpm --filter @societyos/today build:web
+      - name: Build web apps
+        run: scripts/build-web.sh
         env:
-          EXPO_BASE_URL: /societyos
-      - name: Let deep links load the app
-        run: cp apps/today/dist/index.html apps/today/dist/404.html
+          # Sign-in app ids for Inbox (empty is fine: it shows sample mail).
+          EXPO_PUBLIC_MS_CLIENT_ID: ${{ vars.MS_CLIENT_ID }}
+          EXPO_PUBLIC_GOOGLE_CLIENT_ID: ${{ vars.GOOGLE_CLIENT_ID }}
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: apps/today/dist
+          path: site
 
   deploy:
     needs: build

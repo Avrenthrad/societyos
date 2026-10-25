@@ -9,7 +9,8 @@ const fields: Partial<Record<EntityType, (e: any) => (string | undefined)[]>> = 
   event: (e) => [e.title, e.location],
   message: (e) => [e.subject, e.body],
   place: (e) => [e.name, e.address],
-  transaction: (e) => [e.description, e.category],
+  transaction: (e) => [e.description, e.category, e.notes],
+  bill: (e) => [e.name, e.category],
   file: (e) => [e.name],
 };
 
