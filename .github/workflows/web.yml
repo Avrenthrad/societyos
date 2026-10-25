@@ -32,6 +32,10 @@ jobs:
       - run: pnpm test
       - name: Build web apps
         run: scripts/build-web.sh
+        env:
+          # Sign-in app ids for Inbox (empty is fine: it shows sample mail).
+          EXPO_PUBLIC_MS_CLIENT_ID: ${{ vars.MS_CLIENT_ID }}
+          EXPO_PUBLIC_GOOGLE_CLIENT_ID: ${{ vars.GOOGLE_CLIENT_ID }}
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
