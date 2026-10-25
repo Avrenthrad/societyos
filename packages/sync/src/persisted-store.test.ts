@@ -37,4 +37,21 @@ describe("PersistedStore", () => {
     kv.data.set("k", "{not json");
     expect(await new PersistedStore(kv, "k").load()).toBe(0);
   });
+
+  it("two apps sharing storage never wipe each other's rows", async () => {
+    const kv = memoryKv();
+    const today = new PersistedStore(kv);
+    const finance = new PersistedStore(kv);
+    await today.put(createEntity("task", { ...base, title: "From Today", status: "open", priority: 0 }));
+    await today.flush();
+    await finance.put(createEntity("task", { ...base, title: "Pay rent", status: "open", priority: 0 }));
+    await finance.flush();
+    const saved = JSON.parse(kv.data.get("societyos:store:v1")!) as { title: string }[];
+    expect(saved.map((t) => t.title).sort()).toEqual(["From Today", "Pay rent"]);
+    // Today hears about Finance's task without a reload.
+    const seen: string[] = [];
+    today.subscribe((c) => seen.push((c.entity as { title: string }).title));
+    expect(await today.refresh()).toBe(1);
+    expect(seen).toEqual(["Pay rent"]);
+  });
 });

@@ -16,5 +16,5 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
       - run: pnpm test
-      - name: Web build still works
-        run: pnpm --filter @societyos/today build:web
+      - name: Web builds still work
+        run: scripts/build-web.sh

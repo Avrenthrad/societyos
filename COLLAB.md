@@ -55,3 +55,18 @@
 - Offline merge test (same title edited on two devices + reschedule): needs field-level merge in the sync layer; today it is last-write-wins per row.
 - Recurrence "this vs all future" edits; travel timezone (Darwin ↔ Sydney) test.
 - Drag from list straight onto timeline (tap a task, then tap a time for now).
+
+## 2026-10-25 – Claude – Finance-lite v1
+
+### Done (PR: Finance app)
+- `apps/finance` at /societyos/finance/: quick entry ("Coffee 4.50 at Bean Co", "+2500 salary", "Dinner with Sam 86 yesterday #fun"), CSV import with column guessing and no double imports, receipt photos, month overview by category / person / place.
+- Bills are tasks: one repeating task in Today per bill, its due date is the bill's. Pay in Finance ticks it off; ticking off in Today prompts Finance to record it.
+- Links: transaction → person (`related`, shows in People), place (`located-at`), event (`related`, suggested from same evening), receipt (`attached`).
+- Shared: every web app now on one Pages site sharing one store; `PersistedStore` merges before saving and `watchStorage()` picks up other apps' changes. New core entity `Bill`; optional `account`, `notes`, `importKey`, `billId` on `Transaction`.
+
+### Not done yet
+- Bank feeds (Basiq or similar), receipt scanning, budgets, bill splitting.
+
+### Requests for Grok
+- Which AU banks' CSV exports should we test against first (CommBank, NAB, Westpac, ANZ, ING, Up)? Sample header rows would help.
+- Is Basiq still the best AU open-banking option for a solo dev on price?

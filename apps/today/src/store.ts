@@ -19,7 +19,9 @@ function deviceStorage(): KeyValue {
 
 // Saved on this device and loaded on start. Swap for the SQLite + sync
 // store once the backend is set up (see docs/architecture.md).
+// Every SocietyOS web app shares this storage, so watch for their changes.
 export const store = new PersistedStore(deviceStorage());
+store.watchStorage();
 export const ME = "local-user";
 export const APP = "today";
 

@@ -16,6 +16,7 @@ export interface KeyValue {
  */
 export class PersistedStore extends MemoryStore {
   private timer: ReturnType<typeof setTimeout> | undefined;
+  private merging = false;
 
   constructor(
     private kv: KeyValue,
@@ -43,14 +44,57 @@ export class PersistedStore extends MemoryStore {
     return rows.length;
   }
 
-  /** Write now instead of waiting for the debounce. */
+  /**
+   * Pick up rows another app or tab saved since we last looked. Every
+   * SocietyOS web app shares one storage key, so Finance can add a task
+   * that Today shows. Newer rows win, and listeners hear about them.
+   */
+  async refresh(): Promise<number> {
+    const raw = await this.kv.getItem(this.storageKey);
+    if (!raw) return 0;
+    let rows: Entity[];
+    try {
+      rows = JSON.parse(raw) as Entity[];
+    } catch {
+      return 0;
+    }
+    let changed = 0;
+    this.merging = true;
+    try {
+      for (const e of rows) if (await this.applyRemote(e)) changed++;
+    } finally {
+      this.merging = false;
+    }
+    return changed;
+  }
+
+  /**
+   * Write now instead of waiting for the debounce. Merges what is already
+   * saved first, so two apps open at once never wipe each other's rows.
+   */
   async flush() {
     if (this.timer) clearTimeout(this.timer);
     this.timer = undefined;
+    await this.refresh();
     await this.kv.setItem(this.storageKey, JSON.stringify(this.snapshot()));
   }
 
+  /**
+   * Browsers only: apply changes other tabs and apps save (the "storage"
+   * event fires in every other tab of the same site). Call once at start.
+   */
+  watchStorage(): () => void {
+    const g = globalThis as { addEventListener?: (t: string, f: (e: { key: string | null }) => void) => void; removeEventListener?: (t: string, f: (e: { key: string | null }) => void) => void };
+    if (!g.addEventListener) return () => {};
+    const onStorage = (e: { key: string | null }) => {
+      if (e.key === this.storageKey || e.key === null) void this.refresh();
+    };
+    g.addEventListener("storage", onStorage);
+    return () => g.removeEventListener?.("storage", onStorage);
+  }
+
   private scheduleSave() {
+    if (this.merging) return;
     if (this.timer) clearTimeout(this.timer);
     this.timer = setTimeout(() => void this.flush(), this.delayMs);
   }

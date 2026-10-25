@@ -42,6 +42,7 @@ export const appAccents = {
   calendar: "#D93025",
   people: "#8E24AA",
   money: "#00897B",
+  finance: "#00897B",
   places: "#EF6C00",
   files: "#546E7A",
 } as const;
